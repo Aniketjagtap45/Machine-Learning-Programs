@@ -1,0 +1,48 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Generate synthetic data
+np.random.seed(0)
+X = 2 * np.random.rand(100, 1)
+y = 4 + 3 * X + np.random.randn(100, 1)
+
+# Add bias term (X0 = 1)
+X_b = np.c_[np.ones((100, 1)), X]
+
+# Basic Gradient Descent
+def basic_gradient_descent(X, y, theta, lr, iters):
+    for _ in range(iters):
+        gradients = 2 * X.T.dot(X.dot(theta) - y) / len(y)
+        theta -= lr * gradients
+    return theta
+
+# Stochastic Gradient Descent
+def stochastic_gradient_descent(X, y, theta, lr, epochs):
+    for _ in range(epochs):
+        for i in range(len(y)):
+            random_index = np.random.randint(len(y))
+            xi = X[random_index:random_index+1]
+            yi = y[random_index:random_index+1]
+            gradients = 2 * xi.T.dot(xi.dot(theta) - yi)
+            theta -= lr * gradients
+    return theta
+
+# Initial parameters
+theta_initial = np.random.randn(2, 1)
+
+# Run Basic Gradient Descent
+theta_gd = basic_gradient_descent(X_b, y, theta_initial.copy(), lr=0.1, iters=1000)
+
+# Run Stochastic Gradient Descent
+theta_sgd = stochastic_gradient_descent(X_b, y, theta_initial.copy(), lr=0.01, epochs=50)
+
+# Plotting the results
+plt.scatter(X, y, color='blue', label='Data')
+plt.plot(X, X_b.dot(theta_gd), color='red', label='Basic Gradient Descent')
+plt.plot(X, X_b.dot(theta_sgd), color='green', label='Stochastic Gradient Descent')
+plt.legend()
+plt.show()
+
+# Output the final parameters
+print("Theta from Basic Gradient Descent:", theta_gd)
+print("Theta from Stochastic Gradient Descent:", theta_sgd)
