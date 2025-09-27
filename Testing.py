@@ -1,14 +1,7 @@
 def addition():
-    a=2
-    b=5
-    c=10
+    a=3,b=6
+    c=a+b
+    return c
 
-    return d
 
 addition()
-
-
-
-
-
-test()
